@@ -11,7 +11,7 @@ import streamlit as st
 load_dotenv()  
 GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
 
-if not api_key:
+if not GOOGLE_API_KEY:
     raise RuntimeError("GOOGLE_API_KEY not set. Add it to your deployment secrets!")
 
 llm = ChatGoogleGenerativeAI(
@@ -34,5 +34,6 @@ graph.add_node("chat_node", chat_node)
 graph.add_edge(START, "chat_node")
 graph.add_edge("chat_node", END)
 compiled_graph = graph.compile(checkpointer=InMemorySaver())
+
 
 
