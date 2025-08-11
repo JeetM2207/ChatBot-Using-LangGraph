@@ -13,6 +13,7 @@ model = ChatGoogleGenerativeAI(
     model='gemini-2.5-flash',   # or \"gemini-1.5-pro\", if available\n",
     temperature=0.7,
     google_api_key=os.getenv('GOOGLE_API_KEY')
+    request_timeout=60 
 )
 
 class ChatState(TypedDict):
@@ -30,5 +31,6 @@ graph = StateGraph(ChatState)
 graph.add_node("chat_node", chat_node)
 graph.add_edge(START, "chat_node")
 graph.add_edge("chat_node", END)
+
 
 chatbot = graph.compile(checkpointer=checkpointer)
