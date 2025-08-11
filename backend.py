@@ -47,7 +47,8 @@ graph = StateGraph(ChatState)
 graph.add_node("chat_node", chat_node)
 graph.add_edge(START, "chat_node")
 graph.add_edge("chat_node", END)
-compiled_graph = graph.compile(checkpointer=InMemorySaver())
+chatbot = graph.compile(checkpointer=InMemorySaver())
+
 
 
 
