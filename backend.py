@@ -7,19 +7,31 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.checkpoint.memory import InMemorySaver
 import streamlit as st
 
+# Try importing st only if running in Streamlit
+try:
+    import streamlit as st
+    STREAMLIT = True
+except ImportError:
+    STREAMLIT = False
 
-load_dotenv()  
-GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
+load_dotenv()
 
-if not GOOGLE_API_KEY:
-    raise RuntimeError("GOOGLE_API_KEY not set. Add it to your deployment secrets!")
+def get_api_key():
+    if STREAMLIT and "GOOGLE_API_KEY" in st.secrets:
+        return st.secrets["GOOGLE_API_KEY"]
+    return os.getenv("GOOGLE_API_KEY")
 
-llm = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash",  
+GOOGLE_API_KEY = get_api_key()
+
+from langchain_google_genai import ChatGoogleGenerativeAI
+
+model = ChatGoogleGenerativeAI(
+    model="gemini-2.5-flash",
     temperature=0.7,
     google_api_key=GOOGLE_API_KEY,
-    request_timeout=60  
+    request_timeout=60
 )
+
 
 
 class ChatState(BaseMessage, dict): pass 
@@ -34,6 +46,7 @@ graph.add_node("chat_node", chat_node)
 graph.add_edge(START, "chat_node")
 graph.add_edge("chat_node", END)
 compiled_graph = graph.compile(checkpointer=InMemorySaver())
+
 
 
 
