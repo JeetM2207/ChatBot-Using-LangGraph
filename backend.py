@@ -6,6 +6,7 @@ from langchain_core.messages import BaseMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.checkpoint.memory import InMemorySaver
 import streamlit as st
+from typing import TypedDict, Annotated
 
 # Try importing st only if running in Streamlit
 try:
@@ -34,7 +35,8 @@ model = ChatGoogleGenerativeAI(
 
 
 
-class ChatState(BaseMessage, dict): pass 
+class ChatState(TypedDict):
+    messages: Annotated[list[BaseMessage], add_messages]
 
 def chat_node(state):
     messages = state.get("messages", [])
@@ -46,6 +48,7 @@ graph.add_node("chat_node", chat_node)
 graph.add_edge(START, "chat_node")
 graph.add_edge("chat_node", END)
 compiled_graph = graph.compile(checkpointer=InMemorySaver())
+
 
 
 
