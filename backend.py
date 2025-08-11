@@ -40,7 +40,7 @@ class ChatState(TypedDict):
 
 def chat_node(state):
     messages = state.get("messages", [])
-    response = llm.invoke({"messages": messages})
+    response = model.invoke({"messages": messages})
     return {"messages": [response]}
 
 graph = StateGraph(ChatState)
@@ -48,6 +48,7 @@ graph.add_node("chat_node", chat_node)
 graph.add_edge(START, "chat_node")
 graph.add_edge("chat_node", END)
 chatbot = graph.compile(checkpointer=InMemorySaver())
+
 
 
 
