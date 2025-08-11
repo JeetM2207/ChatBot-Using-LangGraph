@@ -1,11 +1,7 @@
-# Core packages
-python-dotenv
 streamlit
-
-# LangChain & Google Generative AI
+python-dotenv
 langchain
-langchain-google-genai
 langchain-core
-
-# Optional but recommended (for compatibility)
-protobuf<5
+langchain-google-genai
+langgraph
+google-generativeai
